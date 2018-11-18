@@ -5,8 +5,10 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('cluster:server');
+var debug = require('debug')('NewsCluster:server');
 var http = require('http');
+
+
 
 /**
  * Get port from environment and store in Express.
