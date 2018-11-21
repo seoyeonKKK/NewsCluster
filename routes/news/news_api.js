@@ -3,7 +3,8 @@ const express = require('express');
 const async = require('async');
 const router = express.Router();
 var client_id = 'WdFUluGwZ0iHgtqXMMEb';
-var client_secret = 'fL1iLHNjRo';
+var client_secret = 'fL1iLHNjRo'; 
+
 router.get('/', async (req, res, next) => {
   //  var api_url = 'https://openapi.naver.com/v1/search/news.xml?query=%EC%A3%BC%EC%8B%9D&display=10&start=1&sort=sim'; // json 결과
   var api_url = 'https://openapi.naver.com/v1/search/news?query=' + encodeURI(req.query.query) + '&display=10&start=1&sort=sim'; // xml 결과
@@ -12,11 +13,17 @@ router.get('/', async (req, res, next) => {
       url: api_url,
       headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
   };
+  let result = {};
   request.get(options, function (error, response, body) {
+    
     if (!error && response.statusCode == 200) {
-      res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
-      res.end(body);
-      console.log('success connection 200'); 
+      // res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
+      // res.end(body);
+      console.log('success connection 200');
+      response.body = JSON.parse(response.body);
+      // console.log(response.body.items[0].title);
+      result = response.body;
+      return res.r(result);
     } else {
       res.status(response.statusCode).end();
       console.log('error = ' + response.statusCode);
